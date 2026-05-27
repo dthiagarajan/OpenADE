@@ -20,7 +20,6 @@ import {
     RemoteRoute,
 } from "./Routes"
 import { codeRoutes } from "./routing"
-import { registerCompanionController } from "./remote/registerCompanionController"
 import { CodeStoreProvider } from "./store/context"
 import { CodeStore, type CodeStoreConfig } from "./store/store"
 import "./index.css"
@@ -55,14 +54,11 @@ function App() {
     const [initialized, setInitialized] = useState(false)
 
     useEffect(() => {
-        let disposeCompanion: (() => void) | null = null
         codeStore.initializeStores().then(() => {
-            disposeCompanion = registerCompanionController(codeStore)
             setInitialized(true)
         })
 
         return () => {
-            disposeCompanion?.()
             codeStore.disconnectAllStores()
         }
     }, [])
